@@ -7,7 +7,9 @@ import apiV1 from './routes/index';
 
 dotenv.config();
 
-const port:string = process.env.PORT as string ?? 3000;
+const port:number = Number(process.env.PORT) ?? 3000;
+const host: string = process.env.HOST as string;
+
 const app = express();
 app.use(json());
 
@@ -19,7 +21,7 @@ app.use((req: Request, res: Response): void => {
 
 connectToDB().then((connected: boolean) => {
   if (connected) {
-    app.listen(port, () => console.log('corriendo en el puerto ' + port));
+    app.listen(port, host, () => console.log('corriendo en el puerto ' + port));
   } else {
     console.log('Error mongo db');
   }

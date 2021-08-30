@@ -10,7 +10,8 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const connection_1 = __importDefault(require("./db/connection"));
 const index_1 = __importDefault(require("./routes/index"));
 dotenv_1.default.config();
-const port = (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 3000;
+const port = (_a = Number(process.env.PORT)) !== null && _a !== void 0 ? _a : 3000;
+const host = process.env.HOST;
 const app = express_1.default();
 app.use(body_parser_1.json());
 index_1.default(app);
@@ -19,7 +20,7 @@ app.use((req, res) => {
 });
 connection_1.default().then((connected) => {
     if (connected) {
-        app.listen(port, () => console.log('corriendo en el puerto ' + port));
+        app.listen(port, host, () => console.log('corriendo en el puerto ' + port));
     }
     else {
         console.log('Error mongo db');
