@@ -23,6 +23,7 @@ const userController = __importStar(require("../controllers/user-controller"));
 const productController = __importStar(require("../controllers/products-controller"));
 const createRouteV1 = (app) => {
     app.get('/api/v1/users', userController.getUsers);
+    app.post('/api/v1/users/create', userController.createUser);
     app.get('/api/v1/users/:userId', userController.getUserById);
     app.get('/api/v1/products', productController.getProduct);
     app.get('/api/v1/products/:productId', productController.getProductById);

@@ -1,18 +1,46 @@
 import { Request, Response } from 'express';
-import {users} from '../data/users';
+import bcrypt from 'bcrypt';
+import { mongo } from 'mongoose';
 
-const getUsers = (req: Request, res: Response): void => {
+import Users from '../db/schemas/user';
+
+const getUsers = async (req: Request, res: Response): Promise<void> => {
+  const users = await Users.find().select({password:0, __v:0});
   res.send(users);
 };
 
-const getUserById = (req: Request, res: Response): void => {
-  const id = Number(req.params.userId);
-  const uniqueUser = users.filter((item) => item.id === id);
-  if (uniqueUser.length !== 0) {
-    res.send(uniqueUser);
+const getUserById = async (req: Request, res: Response): Promise<void> => {
+  const id = req.params.userId;
+  const user = await Users.findById(id).select({password:0, __v:0});
+  if (user) {
+    res.send(user);
   } else {
-    res.status(404).send('No existe el usuario');
+    res.status(404).send({});
   }
 };
 
-export { getUsers, getUserById };
+const createUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, first_name, last_name, avatar, password } = req.body;
+    const hash: string = await bcrypt.hash(password, 15);
+    const newUser = await Users.create({
+      email,
+      first_name,
+      last_name,
+      avatar,
+      password: hash,
+    });
+    res.send(newUser);
+  } catch (e) {
+    console.error(e);
+    if (e instanceof mongo.MongoError) {
+      res.status(400).send({
+        code: e.code,
+        message: e.code === 11000 ? 'Duplicated value' : 'Error',
+      });
+      return;
+    }
+  }
+};
+
+export { getUsers, getUserById, createUser };
