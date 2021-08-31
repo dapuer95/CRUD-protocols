@@ -7,7 +7,7 @@ import apiV1 from './routes/index';
 
 dotenv.config();
 
-const port:number = Number(process.env.PORT) ?? 3000;
+const port:number = Number(process.env.PORT) ?? 3030;
 const host: string = process.env.HOST as string;
 
 const app = express();
