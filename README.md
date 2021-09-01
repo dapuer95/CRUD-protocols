@@ -1,5 +1,5 @@
 # CRUD-protocols
-This Api allows to get the products and user from a mongo database. 
+This API allows to get the products and users from a mongo database. 
 
 It is build in Node js using typeScript and its purpose is to learn how to use different node libraries such as express, dotenv, mongoose, bcrypt, nodemon, eslint and how to set the configuration to use typeScript in a Node project.
 
